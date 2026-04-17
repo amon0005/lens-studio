@@ -43,6 +43,7 @@ const cancelProjectButton = document.getElementById("cancel-project");
 const contactForm = document.getElementById("contact-form");
 const contactFormStatus = document.getElementById("contact-form-status");
 const isStaticHeader = header.classList.contains("site-header-static");
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 let currentTestimonial = 0;
 
@@ -81,6 +82,12 @@ function renderTestimonial(index) {
 
     const testimonial = testimonials[index];
     quoteElement.textContent = testimonial.quote;
+    quoteElement.dataset.splitReady = "false";
+    quoteElement.classList.remove("split-text", "is-visible");
+    prepareSplitText(quoteElement);
+    requestAnimationFrame(() => {
+        quoteElement.classList.add("is-visible");
+    });
     authorAvatarElement.src = testimonial.image;
     authorAvatarElement.alt = testimonial.alt;
     authorNameElement.textContent = testimonial.name;
@@ -105,6 +112,89 @@ function updateUploadStatus(file) {
 
     uploadStatusText.textContent = `${file.name} ready to publish`;
     uploadProgressFill.style.width = "100%";
+}
+
+function prepareSplitText(element) {
+    if (!element || reduceMotion || element.dataset.splitReady === "true") {
+        return;
+    }
+
+    const text = element.textContent.trim();
+    element.textContent = "";
+    element.classList.add("split-text", "motion-reveal");
+
+    let charIndex = 0;
+
+    text.split(" ").forEach((word, wordIndex, words) => {
+        const wordSpan = document.createElement("span");
+        wordSpan.className = "split-word";
+
+        [...word].forEach((char) => {
+            const charSpan = document.createElement("span");
+            charSpan.className = "split-char";
+            charSpan.style.setProperty("--char-index", charIndex);
+            charSpan.textContent = char;
+            wordSpan.appendChild(charSpan);
+            charIndex += 1;
+        });
+
+        element.appendChild(wordSpan);
+
+        if (wordIndex < words.length - 1) {
+            element.appendChild(document.createTextNode(" "));
+        }
+    });
+
+    element.dataset.splitReady = "true";
+}
+
+function setupMotionSystem() {
+    const splitTargets = document.querySelectorAll(
+        ".hero-main h1, .section-title, .add-project-title, .contact-page-title, .selected-project-title, .next-project-title, .testimonial-quote"
+    );
+
+    splitTargets.forEach((element) => prepareSplitText(element));
+
+    const revealTargets = [
+        ...document.querySelectorAll(
+            ".hero-copy, .hero-meta, .about-copy, .about-media-block, .project-showcase, .testimonial-card, .footer-intro, .footer-links, .footer-bottom, .add-project-grid, .contact-page-grid, .selected-project-topbar, .selected-project-media, .selected-project-info-grid, .next-project-block"
+        )
+    ];
+
+    revealTargets.forEach((element, index) => {
+        element.classList.add("motion-reveal");
+        element.style.setProperty("--reveal-delay", `${Math.min(index % 4, 3) * 70}ms`);
+    });
+
+    if (reduceMotion) {
+        document.querySelectorAll(".motion-reveal").forEach((element) => {
+            element.classList.add("is-visible");
+        });
+        return;
+    }
+
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add("is-visible");
+                    observer.unobserve(entry.target);
+                }
+            });
+        },
+        {
+            threshold: 0.14,
+            rootMargin: "0px 0px -8% 0px"
+        }
+    );
+
+    document.querySelectorAll(".motion-reveal").forEach((element) => observer.observe(element));
+}
+
+function initializePageMotion() {
+    requestAnimationFrame(() => {
+        document.body.classList.add("is-loaded");
+    });
 }
 
 navLinks.forEach((link) => {
@@ -160,9 +250,20 @@ if (contactForm) {
     });
 }
 
+let ticking = false;
+
 window.addEventListener("scroll", () => {
-    updateHeaderState();
-    setActiveLink();
+    if (ticking) {
+        return;
+    }
+
+    ticking = true;
+
+    requestAnimationFrame(() => {
+        updateHeaderState();
+        setActiveLink();
+        ticking = false;
+    });
 });
 
 if (quoteElement) {
@@ -173,5 +274,7 @@ if (projectForm) {
     updateUploadStatus(null);
 }
 
+setupMotionSystem();
+initializePageMotion();
 updateHeaderState();
 setActiveLink();

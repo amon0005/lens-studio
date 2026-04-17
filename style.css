@@ -9,6 +9,8 @@
     --footer-line: rgba(255, 255, 255, 0.14);
     --footer-muted: #767676;
     --white: #ffffff;
+    --ease-smooth: cubic-bezier(0.22, 1, 0.36, 1);
+    --ease-soft: cubic-bezier(0.3, 0, 0.15, 1);
 }
 
 * {
@@ -19,12 +21,21 @@
 
 html {
     scroll-behavior: smooth;
+    scroll-padding-top: 112px;
 }
 
 body {
     background: var(--bg);
     color: var(--text);
     font-family: "Inter", sans-serif;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.8s var(--ease-smooth), transform 0.8s var(--ease-smooth);
+}
+
+body.is-loaded {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .page-main {
@@ -34,10 +45,16 @@ body {
 a {
     color: inherit;
     text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 button {
     font: inherit;
+}
+
+img,
+iframe {
+    will-change: transform;
 }
 
 .site-header {
@@ -45,13 +62,15 @@ button {
     inset: 0 0 auto;
     z-index: 20;
     padding: 24px 24px 0;
-    transition: background 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease;
+    transition: background 0.35s var(--ease-soft), padding 0.35s var(--ease-soft), box-shadow 0.35s var(--ease-soft);
+    backdrop-filter: blur(0);
 }
 
 .site-header.scrolled {
     padding: 0;
     background: rgba(0, 0, 0, 0.96);
     box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
+    backdrop-filter: blur(14px);
 }
 
 .site-header-static {
@@ -64,7 +83,7 @@ button {
     justify-content: space-between;
     gap: 32px;
     padding: 24px;
-    transition: padding 0.3s ease;
+    transition: padding 0.35s var(--ease-soft);
 }
 
 .site-header.scrolled .main-nav {
@@ -91,11 +110,16 @@ button {
     color: rgba(255, 255, 255, 0.92);
     font-size: 0.96rem;
     font-weight: 500;
+    transition: color 0.28s var(--ease-soft), transform 0.28s var(--ease-soft);
 }
 
 .nav-link.active {
     color: var(--white);
     font-weight: 700;
+}
+
+.nav-link:hover {
+    transform: translateY(-1px);
 }
 
 .nav-link::after {
@@ -108,7 +132,7 @@ button {
     transform: scaleX(0);
     transform-origin: left;
     background: var(--white);
-    transition: transform 0.25s ease;
+    transition: transform 0.28s var(--ease-soft);
 }
 
 .nav-link:hover::after,
@@ -181,10 +205,59 @@ button {
     border-bottom: 2px solid currentColor;
     font-size: 1rem;
     font-weight: 500;
+    transition: gap 0.25s var(--ease-soft), transform 0.25s var(--ease-soft), opacity 0.25s var(--ease-soft);
 }
 
 .action-arrow {
     font-size: 1.1rem;
+    transition: transform 0.25s var(--ease-soft);
+}
+
+.line-action:hover {
+    gap: 24px;
+}
+
+.line-action:hover .action-arrow {
+    transform: translate(4px, -4px);
+}
+
+.motion-reveal {
+    opacity: 0;
+    transform: translateY(36px);
+    transition:
+        opacity 0.85s var(--ease-smooth),
+        transform 0.85s var(--ease-smooth);
+    transition-delay: var(--reveal-delay, 0ms);
+}
+
+.motion-reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.split-text {
+    overflow: hidden;
+}
+
+.split-word {
+    display: inline-flex;
+    margin-right: 0.18em;
+    overflow: hidden;
+}
+
+.split-char {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(1.05em) rotate(4deg);
+    transition:
+        opacity 0.7s var(--ease-smooth),
+        transform 0.7s var(--ease-smooth);
+    transition-delay: calc(var(--char-index) * 22ms + var(--reveal-delay, 0ms));
+}
+
+.split-text.is-visible .split-char {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
 }
 
 .hero-meta {
@@ -256,6 +329,7 @@ button {
     border-radius: 4px;
     overflow: hidden;
     background: #d8d8d8;
+    transition: transform 0.5s var(--ease-smooth), box-shadow 0.5s var(--ease-smooth);
 }
 
 .contact-visual-image {
@@ -304,11 +378,12 @@ button {
     font-size: 1.15rem;
     font-weight: 700;
     cursor: pointer;
-    transition: transform 0.2s ease, opacity 0.2s ease;
+    transition: transform 0.28s var(--ease-soft), opacity 0.28s var(--ease-soft), box-shadow 0.28s var(--ease-soft);
 }
 
 .contact-submit-button:hover {
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(0, 0, 0, 0.14);
 }
 
 .contact-form-status {
@@ -357,6 +432,7 @@ button {
     letter-spacing: 0.12em;
     text-align: center;
     text-transform: uppercase;
+    transition: transform 0.28s var(--ease-soft), opacity 0.28s var(--ease-soft), background 0.28s var(--ease-soft);
 }
 
 .selected-project-button-dark {
@@ -383,6 +459,7 @@ button {
     margin-top: 28px;
     overflow: hidden;
     background: #d7d7d7;
+    transition: transform 0.6s var(--ease-smooth), box-shadow 0.6s var(--ease-smooth);
 }
 
 .selected-project-media::after {
@@ -401,6 +478,7 @@ button {
     border: 0;
     transform: translate(-8%, -7%);
     pointer-events: none;
+    transition: transform 0.9s var(--ease-smooth);
 }
 
 .selected-project-info-grid {
@@ -796,6 +874,11 @@ button {
     aspect-ratio: 1.58;
 }
 
+.about-media-block {
+    width: min(100%, 1142px);
+    margin: 0 auto;
+}
+
 .feature-image {
     display: block;
     width: 100%;
@@ -805,7 +888,8 @@ button {
 }
 
 .line-action-dark {
-    margin: 42px auto 0;
+    display: inline-flex;
+    margin: 42px 0 0;
     color: var(--text);
 }
 
@@ -824,12 +908,16 @@ button {
 
 .project-showcase-link .project-visual,
 .project-showcase-link .project-caption {
-    transition: transform 0.2s ease, opacity 0.2s ease;
+    transition: transform 0.35s var(--ease-soft), opacity 0.35s var(--ease-soft);
 }
 
 .project-showcase-link:hover .project-visual,
 .project-showcase-link:hover .project-caption {
-    transform: translateY(-2px);
+    transform: translateY(-4px);
+}
+
+.project-showcase-link:hover .project-visual {
+    box-shadow: 0 22px 48px rgba(0, 0, 0, 0.12);
 }
 
 .project-visual {
@@ -841,6 +929,7 @@ button {
     position: relative;
     overflow: hidden;
     background: #101010;
+    transition: transform 0.45s var(--ease-smooth), box-shadow 0.45s var(--ease-smooth);
 }
 
 .project-video {
@@ -852,6 +941,7 @@ button {
     border: 0;
     transform: translate(-50%, -54%) scale(1.08);
     pointer-events: none;
+    transition: transform 0.8s var(--ease-smooth);
 }
 
 .video-card::after {
@@ -897,6 +987,7 @@ button {
     width: min(100%, 980px);
     margin: 0 auto;
     padding: 18px 0 24px;
+    transition: transform 0.45s var(--ease-smooth);
 }
 
 .testimonial-author {
@@ -961,12 +1052,13 @@ button {
     font-size: 2rem;
     line-height: 1;
     cursor: pointer;
-    transition: transform 0.2s ease, background 0.2s ease;
+    transition: transform 0.25s var(--ease-soft), background 0.25s var(--ease-soft), box-shadow 0.25s var(--ease-soft);
 }
 
 .testimonial-button:hover {
     background: #e7e7e7;
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.08);
 }
 
 .site-footer {
@@ -1016,11 +1108,31 @@ button {
     border-bottom: 1px solid var(--footer-line);
     color: var(--footer-muted);
     font-size: 0.96rem;
-    transition: color 0.2s ease;
+    transition: color 0.25s var(--ease-soft), transform 0.25s var(--ease-soft);
 }
 
 .footer-links a:hover {
     color: var(--white);
+    transform: translateX(6px);
+}
+
+.upload-dropzone:hover,
+.contact-visual-panel:hover,
+.selected-project-media:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 24px 52px rgba(0, 0, 0, 0.1);
+}
+
+.upload-dropzone:hover {
+    border-color: #bdbdbd;
+}
+
+.video-card:hover .project-video {
+    transform: translate(-50%, -54%) scale(1.12);
+}
+
+.selected-project-media:hover .selected-project-video {
+    transform: translate(-8%, -7%) scale(1.04);
 }
 
 .footer-bottom {
