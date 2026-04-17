@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Project | Lens Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="page-dark-header">
+    <header class="site-header site-header-static scrolled" id="header">
+        <nav class="main-nav" aria-label="Primary">
+            <a class="logo" href="index.html#home">LENS STUDIO</a>
+            <ul class="nav-list">
+                <li><a href="index.html#home" class="nav-link">Home</a></li>
+                <li><a href="index.html#projects" class="nav-link">Projects</a></li>
+                <li><a href="add-project.html" class="nav-link active">Add Project</a></li>
+                <li><a href="index.html#about" class="nav-link">About</a></li>
+                <li><a href="contact.html" class="nav-link">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="page-main">
+        <section id="add-project" class="add-project-section add-project-page-section">
+            <div class="add-project-shell">
+                <h1 class="add-project-title">Add Project</h1>
+
+                <div class="add-project-grid">
+                    <aside class="project-media-panel">
+                        <p class="project-media-label">Project Media</p>
+
+                        <label class="upload-dropzone" for="project-media-input">
+                            <input
+                                id="project-media-input"
+                                class="project-media-input"
+                                type="file"
+                                accept="video/*,image/*,.mov,.mp4,.raw"
+                            >
+                            <div class="upload-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" role="img" aria-hidden="true">
+                                    <path d="M7 18a4 4 0 0 1-.35-7.98A5.5 5.5 0 0 1 17.2 8.3 3.5 3.5 0 1 1 17.5 18H14v-4h2.59L12 9.41 7.41 14H10v4Z"></path>
+                                </svg>
+                            </div>
+                            <p class="upload-title">Upload Video Or Image</p>
+                            <p class="upload-note">MP4, MOV, or RAW (max 500MB)</p>
+                        </label>
+
+                        <div class="upload-status-card">
+                            <p class="upload-status-heading">Upload Status</p>
+                            <div class="upload-progress-track">
+                                <span class="upload-progress-fill" id="upload-progress-fill"></span>
+                            </div>
+                            <p class="upload-status-text" id="upload-status-text">No file selected...</p>
+                        </div>
+                    </aside>
+
+                    <form class="project-form" id="project-form">
+                        <div class="form-row form-row-full">
+                            <label class="form-label" for="project-title">Project Title*</label>
+                            <input
+                                id="project-title"
+                                class="form-input"
+                                type="text"
+                                name="projectTitle"
+                                placeholder="Enter Project Name"
+                            >
+                        </div>
+
+                        <div class="form-row-group">
+                            <div class="form-row">
+                                <label class="form-label" for="project-category">Category</label>
+                                <div class="select-wrap">
+                                    <select id="project-category" class="form-select" name="projectCategory">
+                                        <option value="" selected>Select type</option>
+                                        <option>Videography</option>
+                                        <option>Filmmaking</option>
+                                        <option>Documentary</option>
+                                        <option>Commercial</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <label class="form-label" for="project-tags">Tags</label>
+                                <input
+                                    id="project-tags"
+                                    class="form-input"
+                                    type="text"
+                                    name="projectTags"
+                                    placeholder="E.G Anaphoric"
+                                >
+                            </div>
+                        </div>
+
+                        <div class="form-row form-row-full form-row-description">
+                            <label class="form-label" for="project-description">Description</label>
+                            <textarea
+                                id="project-description"
+                                class="form-textarea"
+                                name="projectDescription"
+                                placeholder="Describe the visual direction and technical specifications..."
+                            ></textarea>
+                        </div>
+
+                        <div class="project-form-actions">
+                            <button class="primary-action" id="publish-project" type="submit">Publish Project</button>
+                            <button class="secondary-action" id="cancel-project" type="button">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contact" class="site-footer">
+        <div class="footer-divider"></div>
+        <div class="footer-intro">
+            <p class="footer-kicker">Let's work together</p>
+            <a class="footer-email" href="mailto:sayhi@lensstudio.com">sayhi@lensstudio.com</a>
+            <a class="line-action footer-action" href="mailto:sayhi@lensstudio.com">
+                <span>Contact Now</span>
+                <span class="action-arrow" aria-hidden="true">↑</span>
+            </a>
+        </div>
+
+        <div class="footer-links">
+            <a href="index.html#home">Home</a>
+            <a href="index.html#projects">Projects</a>
+            <a href="add-project.html">Add Project</a>
+            <a href="index.html#about">About</a>
+            <a href="contact.html">Contact</a>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-bottom">
+            <p class="footer-brand">LENS STUDIO</p>
+            <p class="footer-year">© 2026</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
